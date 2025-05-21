@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        input, select { padding: 5px; margin: 5px; }
+        table, th, td { border: 1px solid #ccc; border-collapse: collapse; padding: 8px; }
+    </style>
+</head>
+<body>
+<h2>Expense Tracker</h2>
+
+<!-- add.html -->
+<form action="/add" method="post">
+    <label for="type">Transaction Type</label>
+    <select name="type" id="type" onchange="updateCategoryOptions()" required>
+        <option value="">--Select--</option>
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+    </select>
+
+    <label for="category">Category</label>
+    <select name="category" id="category" required>
+        <option value="">--Select Transaction Type First--</option>
+    </select>
+
+    <label for="amount">Amount</label>
+    <input type="number" name="amount" placeholder="Amount" step="0.01" required />
+
+    <label for="date">Date</label>
+    <input type="date" name="date" />
+
+    <button type="submit">Add</button>
+</form>
+
+<script>
+    function updateCategoryOptions() {
+        const type = document.getElementById('type').value;
+        const categorySelect = document.getElementById('category');
+
+        // Clear previous options
+        categorySelect.innerHTML = '';
+
+        let options = [];
+
+        if (type === 'Income') {
+            options = ['Salary', 'Business'];
+        } else if (type === 'Expense') {
+            options = ['Food', 'Rent', 'Travel'];
+        }
+
+        // Add default option
+        categorySelect.appendChild(new Option('--Select--', ''));
+
+        // Add new options
+        options.forEach(option => {
+            categorySelect.appendChild(new Option(option, option));
+        });
+    }
+</script>
+
+
+<h3>All Transactions</h3>
+<table>
+    <tr><th>Date</th><th>Type</th><th>Category</th><th>Amount</th></tr>
+    <tr th:each="t : ${transactions}">
+        <td th:text="${t.date}">Date</td>
+        <td th:text="${t.type}">Type</td>
+        <td th:text="${t.category}">Category</td>
+        <td th:text="${t.amount}">Amount</td>
+    </tr>
+</table>
+
+<h3>View Monthly Summary</h3>
+<form action="/summary" method="get">
+    <label for="month">Month:</label>
+    <input type="number" name="month" min="1" max="12" required />
+    
+    <label for="year">Year:</label>
+    <input type="number" name="year" min="2020" max="2100" required />
+    
+    <button type="submit">View Summary</button>
+</form>
+
+</body>
+</html>

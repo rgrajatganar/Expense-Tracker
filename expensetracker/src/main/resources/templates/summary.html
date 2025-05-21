@@ -1,0 +1,54 @@
+<!-- templates/summary.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Monthly Summary</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h2>Monthly Summary</h2>
+        <form method="get" action="/summary">
+            <label for="month">Select Month (YYYY-MM):</label>
+            <input type="month" id="month" name="month" required>
+            <button type="submit">View Summary</button>
+        </form>
+
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Total Amount</th>
+            </tr>
+            <tr th:each="entry : ${summary}">
+                <td th:text="${entry.key}"></td>
+                <td th:text="${entry.value}"></td>
+            </tr>
+        </table>
+        <a href="/" class="button">Back</a>
+    </div>
+    <h2>Summary for [[${month}]] [[${year}]]</h2>
+
+<div class="container">
+    <p><strong>Total Income:</strong> ₹[[${income}]]</p>
+    <p><strong>Total Expenses:</strong> ₹[[${expense}]]</p>
+    <p><strong>Savings:</strong> ₹[[${savings}]]</p>
+
+    <h3>All Transactions:</h3>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+        <tr th:each="t : ${transactions}">
+            <td th:text="${t.type}"></td>
+            <td th:text="${t.category}"></td>
+            <td th:text="${t.amount}"></td>
+            <td th:text="${t.date}"></td>
+        </tr>
+    </table>
+</div>
+    
+</body>
+</html>
